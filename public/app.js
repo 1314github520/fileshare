@@ -62,6 +62,13 @@ function formatDate(value) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
+function formatBytes(bytes) {
+  if (!bytes) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+  return `${(bytes / (1024 ** index)).toFixed(index ? 1 : 0)} ${units[index]}`;
+}
+
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[char])); }
 
 const dialog = $('#uploadDialog');
@@ -70,6 +77,7 @@ const folderInput = $('#folderInput');
 
 function chooseInput() {
   $('#formStatus').textContent = '';
+  resetProgress();
   dialog.showModal();
 }
 
@@ -88,28 +96,59 @@ folderInput.addEventListener('change', () => {
   $('#folderLabel').textContent = folderInput.files.length ? `${folderInput.files.length} 个文件` : '未选择任何文件';
 });
 
-$('#uploadForm').addEventListener('submit', async (event) => {
+function setProgress(percent) {
+  $('#progressFill').style.width = `${percent}%`;
+}
+
+function resetProgress() {
+  setProgress(0);
+  $('#progressBar').classList.remove('visible');
+}
+
+$('#uploadForm').addEventListener('submit', (event) => {
   event.preventDefault();
   const selectedFiles = [...fileInput.files, ...folderInput.files];
   if (!selectedFiles.length) {
     $('#formStatus').textContent = '请先选择文件或文件夹。';
     return;
   }
-  $('#formStatus').textContent = `正在上传 ${selectedFiles.length} 个文件...`;
-  try {
-    const formData = new FormData();
-    selectedFiles.forEach((file) => formData.append('files', file, file.webkitRelativePath || file.name));
-    const response = await fetch('/api/upload', { method: 'POST', body: formData });
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.error || '上传失败');
-    dialog.close();
-    event.target.reset();
-    $('#fileLabel').textContent = '未选择任何文件';
-    $('#folderLabel').textContent = '未选择任何文件';
-    await loadDirectory(state.path);
-  } catch (error) {
-    $('#formStatus').textContent = error.message;
-  }
+  const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+  $('#formStatus').textContent = `正在上传 ${selectedFiles.length} 个文件 (${formatBytes(totalSize)})...`;
+  $('#progressBar').classList.add('visible');
+  setProgress(0);
+
+  const formData = new FormData();
+  selectedFiles.forEach((file) => formData.append('files', file, file.webkitRelativePath || file.name));
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/api/upload');
+  xhr.upload.addEventListener('progress', (e) => {
+    if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 100));
+  });
+  xhr.addEventListener('load', () => {
+    let result;
+    try { result = JSON.parse(xhr.responseText); } catch { result = { error: '上传失败' }; }
+    if (xhr.status >= 200 && xhr.status < 300) {
+      dialog.close();
+      event.target.reset();
+      $('#fileLabel').textContent = '未选择任何文件';
+      $('#folderLabel').textContent = '未选择任何文件';
+      resetProgress();
+      loadDirectory(state.path);
+    } else {
+      $('#formStatus').textContent = result.error || '上传失败';
+      resetProgress();
+    }
+  });
+  xhr.addEventListener('error', () => {
+    $('#formStatus').textContent = '网络错误，请重试';
+    resetProgress();
+  });
+  xhr.addEventListener('abort', () => {
+    $('#formStatus').textContent = '上传已取消';
+    resetProgress();
+  });
+  xhr.send(formData);
 });
 
 $('#searchInput').addEventListener('input', (event) => {
