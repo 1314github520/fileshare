@@ -1,0 +1,48 @@
+:root { font-family: Arial, Helvetica, sans-serif; color: #444; background: #fff; }
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: #fff; }
+body { font-size: 16px; }
+a { color: #1455a5; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.page { max-width: 1320px; margin: 0 auto; padding: 42px 0 70px; }
+.site-header h1 { margin: 0 0 20px; color: #222; font-size: 30px; line-height: 1.2; font-weight: 700; }
+.breadcrumb { height: 30px; font-size: 18px; display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+.breadcrumb a { font-size: 20px; }
+.breadcrumb .sep { color: #999; margin: 0 2px; }
+.actions { display: flex; align-items: center; gap: 16px; min-height: 45px; padding-top: 10px; }
+.actions a { font-size: 16px; }
+.search-box { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; color: #666; font-size: 14px; }
+.search-box input { width: 190px; padding: 3px 5px; border: 0; border-bottom: 1px solid #aaa; outline: 0; color: #444; font: inherit; }
+.search-box input:focus { border-bottom-color: #1455a5; }
+.listing { margin-top: 9px; }
+.listing-head, .file-row { display: grid; grid-template-columns: 44% 17% 39%; align-items: center; }
+.listing-head { min-height: 37px; color: #333; border-bottom: 1px solid #cfcfcf; font-weight: 700; }
+.file-row { min-height: 41px; border-bottom: 1px solid #e5e5e5; }
+.file-row:hover { background: #fafafa; }
+.file-row > div { min-width: 0; padding-right: 16px; }
+.file-row .name a { display: inline-block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.file-row .size, .file-row .date { color: #666; }
+.folder-link { font-weight: 600; }
+.empty-state { display: none; padding: 22px 0; color: #777; }
+.empty-state.visible { display: block; }
+.listing-summary { margin-top: 18px; color: #666; }
+.site-footer { margin-top: 70px; padding-top: 20px; border-top: 1px solid #e5e5e5; color: #888; line-height: 1.6; }
+.site-footer p { margin: 0 0 6px; }
+.site-footer a { color: #888; }
+.upload-dialog { width: 390px; padding: 0; border: 1px solid #aaa; border-radius: 2px; background: #fff; color: #444; }
+.upload-dialog::backdrop { background: rgba(0, 0, 0, .25); }
+.upload-dialog form { padding: 20px 22px 22px; }
+.dialog-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; color: #222; font-size: 18px; }
+.dialog-title button { border: 0; padding: 0 2px; color: #777; background: transparent; font-size: 24px; line-height: 1; cursor: pointer; }
+.upload-hint { margin: -7px 0 18px; color: #777; font-size: 13px; line-height: 1.5; }
+.file-picker { margin: 14px 0; }
+.picker-label { display: block; margin-bottom: 6px; font-size: 13px; color: #555; }
+.picker-row { display: flex; align-items: center; gap: 8px; }
+.picker-btn { padding: 6px 14px; border: 1px solid #bbb; border-radius: 2px; background: #f5f5f5; color: #333; font-size: 13px; cursor: pointer; white-space: nowrap; }
+.picker-btn:hover { background: #e9e9e9; }
+.picker-text { font-size: 13px; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.form-status { min-height: 18px; margin: 9px 0; color: #b44; font-size: 13px; }
+.submit { padding: 7px 17px; border: 1px solid #888; border-radius: 2px; background: #f5f5f5; color: #333; cursor: pointer; }
+.submit:hover { background: #e9e9e9; }
+@media (max-width: 1420px) { .page { margin: 0 7%; } }
+@media (max-width: 640px) { .page { margin: 0 20px; padding-top: 30px; }.site-header h1 { font-size: 26px; }.listing-head, .file-row { grid-template-columns: 52% 19% 29%; font-size: 14px; }.file-row { min-height: 44px; }.file-row > div { padding-right: 8px; }.site-footer { margin-top: 48px; }.upload-dialog { width: calc(100% - 30px); } }

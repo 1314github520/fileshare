@@ -1,0 +1,17 @@
+[Unit]
+Description=Soft Share public software archive
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/opt/softshare
+Environment=NODE_ENV=production
+Environment=PORT=3000
+ExecStart=/usr/bin/node /opt/softshare/server.js
+Restart=on-failure
+RestartSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

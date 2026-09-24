@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SoftShare 公共软件文件目录">
+  <title>SoftShare Packages</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+</head>
+
+<body>
+  <main class="page">
+    <header class="site-header">
+      <h1>SoftShare Packages</h1>
+      <div class="breadcrumb" id="breadcrumb"><a href="#" data-path="">/</a></div>
+      <div class="actions">
+        <a href="/" id="refreshLink">[刷新]</a>
+        <a href="#" id="openUpload">[上传]</a>
+        <label class="search-box"><span>搜索:</span><input id="searchInput" type="search" placeholder="输入文件名"
+            autocomplete="off"></label>
+      </div>
+    </header>
+    <section class="listing" aria-label="软件文件目录">
+      <div class="listing-head"><span>名称</span><span>大小</span><span>时间</span></div>
+      <div id="fileList" class="file-list" aria-live="polite"></div>
+      <div class="empty-state" id="emptyState">当前目录为空。</div>
+      <div class="listing-summary" id="listingSummary"></div>
+    </section>
+    <footer class="site-footer">
+      <p>Developed By SoftShare Community</p>
+      <p>Contact Me: <a href="mailto:mail@584399.xyz">mail@584399.xyz</a></p>
+    </footer>
+  </main>
+  <dialog id="uploadDialog" class="upload-dialog">
+    <form id="uploadForm" enctype="multipart/form-data">
+      <div class="dialog-title"><strong>上传软件</strong><button type="button" id="closeUpload" aria-label="关闭">×</button>
+      </div>
+      <p class="upload-hint">选择文件或整个文件夹后，点击上传。文件名将作为软件名称。</p>
+      <div class="file-picker">
+        <span class="picker-label">上传文件</span>
+        <div class="picker-row">
+          <button type="button" class="picker-btn" id="fileBtn">选择文件</button>
+          <span class="picker-text" id="fileLabel">未选择任何文件</span>
+        </div>
+        <input id="fileInput" name="files" type="file" multiple hidden>
+      </div>
+      <div class="file-picker">
+        <span class="picker-label">选择文件夹</span>
+        <div class="picker-row">
+          <button type="button" class="picker-btn" id="folderBtn">选择文件夹</button>
+          <span class="picker-text" id="folderLabel">未选择任何文件</span>
+        </div>
+        <input id="folderInput" type="file" webkitdirectory directory multiple hidden>
+      </div>
+      <p class="form-status" id="formStatus"></p>
+      <button class="submit" type="submit">开始上传</button>
+    </form>
+  </dialog>
+</body>
+
+</html>
